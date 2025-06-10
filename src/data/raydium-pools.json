@@ -1,0 +1,31 @@
+{
+    "official": [
+      {
+        "id": "58oQChx4yWmvKdwLLZzBi4ChoCc2fqbAaGgjm9reA2U",
+        "baseMint": "So11111111111111111111111111111111111111112",
+        "quoteMint": "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr",
+        "lpMint": "8HoQnePLqPj4M7PUDzfw8e3Ymdwgc7NLGnaTUapubyvu",
+        "baseDecimals": 9,
+        "quoteDecimals": 6,
+        "lpDecimals": 9,
+        "version": 4,
+        "programId": "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8",
+        "authority": "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1",
+        "openOrders": "HRk9CMrpqRzeUmYAEgF3q9zBZ7aJyr6vwXEWTaDg65Yj",
+        "targetOrders": "EXgME2sUuzBxEc2wuyoSZ8FZNZMC3ChhZgFZRAW3nCQG",
+        "baseVault": "6zoYTvgLd4UAhKSPwirEU9VNNNkpezwq8AM4jXW1Qop9",
+        "quoteVault": "3gZQ2YnrXbnRwJj5poffLirF7CwacatvtfGCNRFrbJdr",
+        "withdrawQueue": "11111111111111111111111111111111",
+        "lpVault": "11111111111111111111111111111111",
+        "marketVersion": 3,
+        "marketProgramId": "srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX",
+        "marketId": "8BnEgHoWFysVcuFFX7QztDmzuH8r5ZFvyP3sYwn1XTh6",
+        "marketAuthority": "CK28XJzDzJx1X59kRg9RmmRJs1tYG9nSb1HKSXGFKyEy",
+        "marketBaseVault": "5Xk6RmGJjVDGADEHfpNFMKcGvppgTYrbwvUy8SkLreDZ",
+        "marketQuoteVault": "6w5hF2hceQRZbaxjPJutiWSPAFWDkp3YbY2Aq3RpCSKe",
+        "marketBids": "5jWUncPNBMZJ3sTHKmMLszypVkoRK6bfEQMQUHweeQnh",
+        "marketAsks": "EaXdHx7x1DKpPAeavBFhiNosA8UEKjP3koLz1VbxBP4T",
+        "marketEventQueue": "9MgPMkdEHFX7DZaitSh6Crya3kCCr1As6JC75bm3mjuC"
+      }
+    ]
+  }
