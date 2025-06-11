@@ -9,9 +9,8 @@
 
 ## 🚀 在线演示（Live Demo）
 
-🔗 [点击访问在线应用](https://your-deployment-link.vercel.app)
+🔗 [点击访问在线应用](solana-dex-aggregator.vercel.app)
 
-> 请将 `your-deployment-link.vercel.app` 替换为实际部署链接
 
 ---
 
