@@ -128,13 +128,13 @@ npm run dev
 <img src="./aggregator-frontend/src/assets/screenshot/wallets.png" alt="钱包连接" style="max-width: 300px; height: auto;" />
 
 
-### 首页（Swap）
+### 首页（Swap） 
 <img src="./aggregator-frontend/src/assets/screenshot/首页.png" alt="首页（Swap）" style="max-width: 300px; height: auto;" />
 <img src="./aggregator-frontend/src/assets/screenshot/首页交易设置.png" alt="首页交易设置" style="max-width: 300px; height: auto;" />
 
 ### 链上功能区
 <img src="./aggregator-frontend/src/assets/screenshot/链上功能.png" alt="链上功能区" style="max-width: 300px; height: auto;" />
-<img src="./src/assets/screenshot/链上功能展示.png" alt="功能展示" style="max-width: 300px; height: auto;" />
+<img src="./aggregator-frontend/src/assets/screenshot/链上功能展示.png" alt="功能展示" style="max-width: 300px; height: auto;" />
 
 ### 资产概览和交易记录
 <img src="./aggregator-frontend/src/assets/screenshot/资产概览和交易记录.png" alt="资产概览和交易记录" style="max-width: 300px; height: auto;" />
