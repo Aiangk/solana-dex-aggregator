@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import {
   ConnectionProvider,
   WalletProvider,
@@ -12,26 +11,32 @@ import {
 } from "@solana/wallet-adapter-wallets";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import "@solana/wallet-adapter-react-ui/styles.css";
-import { clusterApiUrl } from "@solana/web3.js";
-import DEXAggregator from "./components/DEXAggregator";
+import { clusterApiUrl, Connection } from "@solana/web3.js";
 import { JupiterProvider } from "@jup-ag/react-hook";
 
-const JupiterWrappedApp = () => {
+import React, { FC, useMemo } from "react";
+
+import { AppRouter } from "./components/AppRouter";
+
+import "@solana/wallet-adapter-react-ui/styles.css";
+
+// 单独包裹使内部可以访问 wallet & connection
+const JupiterWrapper: FC<{ children: React.ReactNode }> = ({ children }) => {
   const { connection } = useConnection();
   const { publicKey } = useWallet();
+  const network = WalletAdapterNetwork.Devnet;
 
-  // DEXAggregator 组件内部已经处理了 publicKey 不存在时的情况（显示连接钱包按钮），
-  // 所以我们可以直接渲染 JupiterProvider。
-  // 我们将 publicKey (可能为 null) 传递给 userPublicKey 属性。
-  // JupiterProvider 将会响应 publicKey 从 null 变为有效值的过程。
   return (
-    <JupiterProvider connection={connection} userPublicKey={publicKey || undefined}>
-      <DEXAggregator />
+    <JupiterProvider
+      connection={connection}
+      userPublicKey={publicKey || undefined}
+    >
+      {children}
     </JupiterProvider>
   );
 };
 
-export default function App() {
+const App: FC = () => {
   const network = WalletAdapterNetwork.Devnet;
   const endpoint = useMemo(() => clusterApiUrl(network), [network]);
   const wallets = useMemo(
@@ -43,9 +48,15 @@ export default function App() {
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
-          <JupiterWrappedApp />
+          <JupiterWrapper>
+            <AppRouter />
+          </JupiterWrapper>
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
   );
 };
+
+
+
+export default App;

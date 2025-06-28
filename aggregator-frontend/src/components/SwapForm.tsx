@@ -1,8 +1,10 @@
-import React from 'react';
-import { ArrowDownUp } from 'lucide-react';
-import BigNumber from 'bignumber.js';
+import React from "react";
+import { ArrowDownUp } from "lucide-react";
+import BigNumber from "bignumber.js";
 import JSBI from "jsbi";
-
+import { RouteStep } from "../hooks/useDEXAggregatorLogic";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { useTranslation } from "react-i18next";
 // 定义从父组件传入的类型
 interface AppToken {
   symbol: string;
@@ -21,6 +23,7 @@ interface QuoteResult {
   outputAmount: string;
   originalQuote?: any;
   error?: string;
+  routePath?: RouteStep[];
 }
 
 interface SwapFormProps {
@@ -40,6 +43,7 @@ interface SwapFormProps {
   jupiterQuote: Quote | undefined | null;
   activeSwap: string | null;
   jupiterError: string | undefined;
+  cachedQuote: QuoteResult | null;
 
   // Handlers
   setAmount: (value: string) => void;
@@ -77,13 +81,16 @@ const TokenSelector: React.FC<{
       ))}
     </select>
     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
-      <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+      <svg
+        className="fill-current h-4 w-4"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+      >
         <path d="M5.516 7.548c.436-.446 1.043-.48 1.576 0L10 10.405l2.908-2.857c.533-.48 1.141-.446 1.574 0 .436.445.408 1.197 0 1.615-.406.418-4.695 4.502-4.695 4.502a1.095 1.095 0 01-1.576 0S5.11 9.581 5.11 9.163c0-.418.072-1.17.406-1.615z" />
       </svg>
     </div>
   </div>
 );
-
 
 const SwapForm: React.FC<SwapFormProps> = ({
   amount,
@@ -110,14 +117,16 @@ const SwapForm: React.FC<SwapFormProps> = ({
   handleGetQuote,
   handleRaydiumSwap,
   handleJupiterSwap,
-  getTokenLogo
+  getTokenLogo,
+  cachedQuote,
 }) => {
+  const { t } = useTranslation(['common']);
   return (
     <main className="relative bg-slate-800/90 p-6 rounded-2xl shadow-2xl border border-slate-700">
       {/* 'From' Token Section */}
       <div className="bg-gray-700/80 p-4 rounded-lg space-y-2">
         <div className="flex justify-between items-center text-sm text-slate-400">
-          <span>From</span>
+           <span>{t('common:swap.from', 'From')}</span>
           <span
             className={`font-mono transition-colors ${
               amount &&
@@ -127,8 +136,8 @@ const SwapForm: React.FC<SwapFormProps> = ({
                 : "text-slate-400"
             }`}
           >
-            余额: {fromBalance !== null ? fromBalance : "--"}
-          </span>
+            {t('common:swap.balance', 'Balance')}: {fromBalance !== null ? fromBalance : "--"}
+            </span>
         </div>
         <div className="flex items-center space-x-4">
           <input
@@ -147,7 +156,7 @@ const SwapForm: React.FC<SwapFormProps> = ({
             className="text-xs bg-purple-600/50 hover:bg-purple-600 px-2 py-1 rounded-md font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={fromTokenBalance === null}
           >
-            Max
+            {t('common:swap.max', 'Max')}
           </button>
           <div className="flex items-center bg-gray-800 p-2 rounded-lg space-x-2 min-w-[180px] w-[180px]">
             <img
@@ -165,7 +174,7 @@ const SwapForm: React.FC<SwapFormProps> = ({
           </div>
         </div>
       </div>
-      
+
       {/* Switch Button */}
       <div className="flex justify-center my-2">
         <button
@@ -180,16 +189,18 @@ const SwapForm: React.FC<SwapFormProps> = ({
       {/* 'To' Token Section */}
       <div className="bg-gray-700/80 p-4 rounded-lg space-y-2">
         <div className="flex justify-between items-center text-sm text-gray-400">
-          <span>To</span>
+          <span>{t('common:swap.to', 'To')}</span>
           <span className="font-mono">
-            余额: {toBalance !== null ? toBalance : "--"}
+            {t('common:swap.balance', 'Balance')}: {toBalance !== null ? toBalance : "--"}
           </span>
         </div>
         <div className="flex items-center space-x-4">
           <input
             type="text"
             value={(() => {
-              const outputToken = supportedTokens.find((t) => t.symbol === toTokenSymbol);
+              const outputToken = supportedTokens.find(
+                (t) => t.symbol === toTokenSymbol
+              );
               if (!jupiterQuote || !outputToken) return "0.0";
               return new BigNumber(jupiterQuote.outAmount.toString())
                 .shiftedBy(-outputToken.decimals)
@@ -230,10 +241,10 @@ const SwapForm: React.FC<SwapFormProps> = ({
             }`}
         >
           {!connected
-            ? "请连接钱包"
+            ? t('common:swap.connectWallet', 'Connect Wallet')
             : isLoading || jupiterLoading
-            ? "正在获取报价..."
-            : "刷新报价"}
+            ? t('common:swap.gettingQuote', 'Getting Quote...')
+            : t('common:swap.refreshQuote', 'Refresh Quote')}
         </button>
       </div>
 
@@ -252,19 +263,43 @@ const SwapForm: React.FC<SwapFormProps> = ({
               disabled={!connected || isSwapping}
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-all disabled:bg-slate-600"
             >
-              {isSwapping && activeSwap === "raydium" ? "处理中..." : "兑换"}
+              {isSwapping && activeSwap === "raydium" ? t('common:swap.swapping', 'Processing...') : t('common:swap.swap', 'Swap')}
             </button>
           </div>
         )}
+        {/* 链上缓存的快速报价 */}
+        {cachedQuote &&
+          cachedQuote.routePath &&
+          cachedQuote.routePath.length > 0 && (
+            <div className="bg-gray-700/80 p-4 rounded-lg space-y-2 mt-4">
+              <h3 className="text-lg font-semibold text-white">Route Information</h3>
+              <ul className="space-y-2">
+                {cachedQuote.routePath.map((step, index) => (
+                  <li
+                    key={index}
+                    className="flex justify-between items-center text-sm text-gray-400"
+                  >
+                    <span>{step.poolName}</span>
+                    <span>
+                      {step.inputAmount} {step.inputSymbol} →{" "}
+                      {step.outputAmount} {step.outputSymbol}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         {jupiterQuote && (
           <div className="bg-slate-700/50 p-3 rounded-lg flex justify-between items-center ring-2 ring-green-500/50 transition-opacity duration-300 animate-fade-in">
             <div>
               <p className="font-semibold text-sm text-green-400">
-                Jupiter (最优)
+                Jupiter (Best Path)
               </p>
               <p className="font-mono text-lg">
                 {(() => {
-                  const outputToken = supportedTokens.find((t) => t.symbol === toTokenSymbol);
+                  const outputToken = supportedTokens.find(
+                    (t) => t.symbol === toTokenSymbol
+                  );
                   if (!outputToken) return "...";
                   return new BigNumber(jupiterQuote.outAmount.toString())
                     .shiftedBy(-outputToken.decimals)
@@ -278,22 +313,22 @@ const SwapForm: React.FC<SwapFormProps> = ({
               disabled={!connected || isSwapping}
               className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-all disabled:bg-slate-600"
             >
-              {isSwapping && activeSwap === "jupiter" ? "处理中..." : "兑换"}
+              {isSwapping && activeSwap === "jupiter" ? t('common:swap.swapping', 'Processing...') : t('common:swap.swap', 'Swap')}
             </button>
           </div>
         )}
         <div className="pt-2 text-center text-sm">
           {(isLoading || jupiterLoading) && (
-            <p className="text-slate-400 animate-pulse">正在寻找最佳路径...</p>
+            <p className="text-slate-400 animate-pulse">{t('common:swap.findingBestPath', 'Finding Best Path...')}</p>
           )}
           {raydiumV2Quote && raydiumV2Quote.error && (
-            <p className="text-red-400">Raydium 错误: {raydiumV2Quote.error}</p>
+            <p className="text-red-400">{t('common:swap.raydiumError', 'Raydium Error: {raydiumV2Quote.error}')}</p>
           )}
           {jupiterError && (
             <p className="text-red-400">
               {jupiterError.includes("TOKEN_NOT_TRADABLE")
-                ? "Jupiter: 当前代币对无法交易"
-                : `Jupiter 错误: ${jupiterError}`}
+                ? t('common:swap.jupiterError', 'Jupiter: Current token pair cannot be traded')
+                : t('common:swap.jupiterError', `Jupiter Error: ${jupiterError}`)}
             </p>
           )}
         </div>

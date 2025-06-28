@@ -3,7 +3,7 @@
 
 # 🌉 Solana DEX 聚合器（solana-dex-aggregator）
 
-一个构建于 **Solana Devnet** 的去中心化交易所（DEX）聚合器，提供近商业级的交易体验。项目集成了智能路由、专业交易设置与现代化 UI，致力于实现**功能完备、界面优雅、用户体验出色**的 DApp。
+一个构建于 **Solana Devnet** 的去中心化交易所（DEX）聚合器，集成 Jupiter、Raydium 等主流协议，提供智能路由、链上限价单、DCA 策略、链上路由分析、历史记录与多语言支持，致力于打造近商业级的极致交易体验。
 
 ---
 
@@ -18,8 +18,9 @@
 
 ### ⚡ 智能聚合路由
 
-* 集成 [Jupiter Aggregator](https://jup.ag/)，自动寻找最优路径与报价
-* 确保用户获得最佳兑换率
+* 集成 Jupiter Aggregator，自动寻找最优路径与报价
+* 支持 Raydium 直连报价与兑换
+* 路由详情可视化展示
 
 ### 🔗 钱包集成
 
@@ -44,6 +45,18 @@
 * 输入校验与提示：金额校验 + 超额输入警告
 * 一键最大金额：支持 “Max” 按钮快速填充可用余额
 
+### 📝 策略与历史
+限价单：链上创建/取消，实时同步
+DCA 策略：本地定投计划，支持多频率
+历史记录：本地保存，支持一键复用与 Solscan 跳转
+
+### 🔗 链上功能区
+可视化展示链上缓存的最佳路由与流动性池
+多币种对支持，详细路由步骤一览
+
+### 🌍 多语言支持
+全局中英文切换，所有页面即时响应
+
 ---
 
 ## 🛠️ 技术栈（Tech Stack）
@@ -58,6 +71,7 @@
 * `@jup-ag/react-hook`：Jupiter 聚合器接入
 * `@solana/web3.js`：与 Solana 区块链交互
 * `@solana/wallet-adapter`：钱包集成适配器
+* `@raydium-io/raydium-sdk`: raydium SDK接入
 
 ### 🎨 UI 与交互
 
@@ -81,11 +95,11 @@
 
 此项目不仅是 DEX 聚合器，更是深入理解 Web3 技术的平台：
 
-* **Solana 程序交互**：RPC 节点调用、发送交易与处理响应
-* **异步编程与副作用管理**：结合 async/await 与 React Hooks
+* **Solana 程序交互**：支持链上 PDA 路由缓存读取与 Anchor 交互
+* **异步编程与副作用管理**：全局 useEffect/useCallback 组合
 * **Solana 账户模型**：理解主账户与 ATA（关联代币账户）的差异
 * **交易生命周期管理**：从构建、签名、发送到确认的完整流程
-* **组件化架构设计**：逻辑与 UI 解耦，如 `useAppLogic.ts`, `SwapForm.tsx`, `SettingsPanel.tsx`
+* **组件化架构设计**：逻辑与 UI 解耦，易于维护和扩展
 * **Vite 环境兼容性处理**：如 Buffer polyfill 等工程化技巧
 
 ---
@@ -114,23 +128,26 @@ npm run dev
 <img src="./src/assets/screenshot/wallets.png" alt="钱包连接" style="max-width: 300px; height: auto;" />
 
 
-### 交易主界面
+### 首页（Swap）
 <img src="./src/assets/screenshot/swap.png" alt="交易主界面" style="max-width: 300px; height: auto;" />
 
-### 设置面板
+### 链上功能区
 <img src="./src/assets/screenshot/settings.png" alt="设置面板" style="max-width: 300px; height: auto;" />
 
+### 历史记录
+<img src="./src/assets/screenshot/settings.png" alt="设置面板" style="max-width: 300px; height: auto;" />
+
+### 限价单与DCA策略
+<img src="./src/assets/screenshot/settings.png" alt="设置面板" style="max-width: 300px; height: auto;" />
 
 ---
 
 ## 🚀 未来计划（Future Improvements）
 
-* ✅ **交易历史记录**：本地记录 + 提供 Solscan 快捷跳转
 * 📊 **价格图表支持**：引入 K 线图组件展示代币走势
-* 🌍 **多语言切换**：集成 i18next 实现中英文界面切换
-
 ---
 
+> 免责声明：本项目仅供学习和技术交流，涉及链上操作请注意资金安全。
 ## 🔼 [返回顶部](#solana-dex-聚合器solana-dex-aggregator)
 
 ---

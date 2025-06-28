@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 // 定义 SettingsPanel 组件需要的 props 类型
 interface SettingsPanelProps {
@@ -28,6 +29,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
   useLegacyTx,
   setUseLegacyTx,
 }) => {
+  const { t } = useTranslation();
   if (!show) {
     return null;
   }
@@ -42,7 +44,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-bold">交易设置</h2>
+        <h2 className="text-lg font-bold">{t('common:settings.title', '交易设置')}</h2>
           <button
             onClick={onClose}
             className="p-1 rounded-full hover:bg-slate-700 text-white"
@@ -68,7 +70,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
           {/* 1. 最大滑点设置 */}
           <div>
             <label className="text-sm font-medium text-slate-300">
-              最大滑点容忍度
+              {t('common:settings.slippage', '最大滑点容忍度')}
             </label>
             <div className="flex items-center space-x-2 mt-2">
               <button
@@ -109,7 +111,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     }
                   }}
                   className="w-full bg-slate-900 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-right pr-6"
-                  placeholder="自定义"
+                  placeholder={t('common:settings.custom', '自定义')}
                 />
                 <span className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400">
                   %
@@ -118,18 +120,18 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
             </div>
             {activeSlippage > 50 && (
               <p className="text-xs text-red-400 mt-2 animate-pulse">
-                警告：滑点值过大，您的交易可能会遭受亏损！
+                {t('common:settings.warning', '警告：滑点值过大，您的交易可能会遭受亏损！')}
               </p>
             )}
-          </div>
+            </div>
 
           {/* 2. 优先费设置 */}
           <div>
             <label className="text-sm font-medium text-slate-300">
-              交易优先费 (可选)
+              {t('common:settings.priorityFee', '交易优先费 (可选)')}
             </label>
             <p className="text-xs text-slate-500 mb-2">
-              在网络拥堵时，支付额外费用可提高交易成功率。
+              {t('common:settings.priorityFeeDesc', '在网络拥堵时，支付额外费用可提高交易成功率。')}
             </p>
             <div className="relative">
               <input
@@ -158,10 +160,10 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   htmlFor="legacy-tx"
                   className="text-sm font-medium text-slate-300"
                 >
-                  使用旧版交易
+                  {t('common:settings.useLegacyTx', '使用旧版交易')}
                 </label>
                 <p className="text-xs text-slate-500">
-                  仅在遇到版本化交易问题时使用。
+                  {t('common:settings.useLegacyTxDesc', '仅在遇到版本化交易问题时使用。')}
                 </p>
               </div>
               <button
